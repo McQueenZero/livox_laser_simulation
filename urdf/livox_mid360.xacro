@@ -23,7 +23,7 @@
         <visualize>${visualize}</visualize>
         <update_rate>${update_rate}</update_rate>
         <!-- This ray plgin is only for visualization. -->
-        <plugin name="gazebo_ros_laser_controller" filename="liblivox_laser_simulation.so">
+        <plugin name="lidar" filename="liblivox_laser_simulation.so">
 			<ray>
 			  <scan>
 				<horizontal>
@@ -54,6 +54,7 @@
 		  <samples>${samples}</samples>
 		  <downsample>${downsample}</downsample>
 		  <csv_file_name>package://livox_laser_simulation/scan_mode/mid360.csv</csv_file_name>
+          <publish_pointcloud_type>1</publish_pointcloud_type>
 		  <ros_topic>${ros_topic}</ros_topic>
         </plugin>
       </sensor>
@@ -61,20 +62,20 @@
   </xacro:macro>
 
 
-  <xacro:macro name="Livox_Mid40" params="visualize:=True name:=livox">
+  <xacro:macro name="Livox_Mid360" params="visualize:=True name:=livox">
     <link name="${name}_base">
       <xacro:null_inertial/>
       <visual> 
-        <origin xyz="0.00 0 0.0" rpy="0 0 0"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://livox_laser_simulation/meshes/livox_mid40.dae">
+          <mesh filename="package://livox_laser_simulation/meshes/livox_mid360.dae">
           </mesh>
         </geometry>
       </visual>
 
       <collision>
-		  <origin xyz="0 0 0" rpy="0 0 0" /> <geometry> <mesh 
-		  filename="package://livox_laser_simulation/meshes/livox_mid40.dae"> 
+		  <origin xyz="0 0 0" rpy="0 0 0" /> <geometry> <mesh
+		  filename="package://livox_laser_simulation/meshes/livox_mid360.dae">
 		  </mesh> </geometry>
       </collision>
     </link>
@@ -85,11 +86,9 @@
     <joint name="${name}_to_${name}_base_joint" type="fixed">
       <parent link="${name}_base"/>
       <child link="${name}"/>
-      <origin rpy="0 0 0" xyz="0.0 1.0 0.2"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
     </joint>
     <xacro:Livox_Mid_gazebo_sensor name="${name}" visualize="${visualize}"/>
   </xacro:macro>
-    <xacro:Livox_Mid40 name="livox"/>
-  <xacro:include filename="$(find livox_laser_simulation)/urdf/standardrobots_oasis300.xacro"/>
-  <xacro:link_oasis name="oasis"/>
+    <xacro:Livox_Mid360 name="livox"/>
 </robot>

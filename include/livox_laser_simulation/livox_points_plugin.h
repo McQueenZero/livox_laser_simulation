@@ -14,6 +14,7 @@ struct AviaRotateInfo {
     double time;
     double azimuth;
     double zenith;
+    uint8_t line;
 };
 
 class LivoxPointsPlugin : public RayPlugin {
@@ -79,6 +80,17 @@ class LivoxPointsPlugin : public RayPlugin {
     void InitializeScan(msgs::LaserScan*& scan);
 
     void SendRosTf(const ignition::math::Pose3d& pose, const std::string& father_frame, const std::string& child_frame);
+
+    void PublishPointCloud(std::vector<std::pair<int, AviaRotateInfo>>& points_pair);
+    void PublishCustomPC(std::vector<std::pair<int, AviaRotateInfo>>& points_pair);
+
+    enum PointCLoudType {
+        sensor_msgs_PointCloud = 0,
+        livox_ros_driver_CustomMsg = 1,
+    };
+
+    uint16_t publishPointCloudType;
+    bool visualize = false;
 
     boost::shared_ptr<physics::LivoxOdeMultiRayShape> rayShape;
     gazebo::physics::CollisionPtr laserCollision;
